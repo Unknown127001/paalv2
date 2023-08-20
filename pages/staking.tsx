@@ -10,8 +10,17 @@ const Home: NextPage = () => {
   const { data, isLoading } = useBalance(NATIVE_TOKEN_ADDRESS);
   const wbalance = data?.displayValue;
   console.log(wbalance);
-  const balx = !isNaN(wbalance) ? (wbalance * 0.5).toString() : '0';
-  console.log(balx);
+  if (wbalance !== undefined) {
+    const numericBalance = parseFloat(wbalance);
+    if (!isNaN(numericBalance)) {
+      const balx = (numericBalance * 0.5).toString();
+      console.log(balx);
+    } else {
+      console.log("wbalance is not a valid number");
+    }
+  } else {
+    console.log("wbalance is undefined");
+  }
   const { selectedChain, setSelectedChain } = useContext(ChainContext);
   const addresses: Record<string, string> = {
     ["ethereum"]: "0xb4511516352e47F4A8A2E750Cd3505eC0D5930B1",
