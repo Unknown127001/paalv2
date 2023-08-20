@@ -25,6 +25,6 @@ name: Deploy
              username: ${{ secrets.VPS_USERNAME }}
              key: ${{ secrets.SSH_PRIVATE_KEY }}
              script: |
-               cd /home/paalai/htdocs/paalai.live
+               cd /htdocs/paalai.live
                git pull
-               # Additional commands for deployment (e.g., starting server)
+               
