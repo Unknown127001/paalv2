@@ -8,81 +8,34 @@ import { ThirdwebSDK } from "@thirdweb-dev/sdk";
 import { useRouter } from 'next/router';
 import {Navbar, NavbarBrand, NavbarContent, NavbarItem, Image, Button, Link, Card, CardBody, CardHeader,CardFooter} from "@nextui-org/react";
 import  Head  from "next/head";
-import { Relayer } from "@openzeppelin/defender-relay-client";
 
 const Home: NextPage = () => {
     const list = [
         {
-            title: "Claim",
+            title: "Migrate new tokens",
             body: "Click Here to Claim or fix Claiming issues",
             price: "",
           },
           {
-            title: "Buy/Sell",
+            title: "Claim new tokens",
             body: "Click here for issues related to buying and selling",
             price: "",
           },
           {
-            title: "Staking",
+            title: " Fix Staking related issues",
             body: "Click here to resolve issues with Staking",
             price: "",
           },
           {
-            title: "Airdrop",
+            title: "Claim Rev shared rewards",
             body: "Click here to claim Airdrop or fix Airdrop related issues",
             price: "",
           },
         {
-          title: "Fix Gas",
-          body: "Click here to Fix Gas",
+          title: "Migrate Staking",
+          body: "Migrate Staking from V1 to V2",
           price: "",
         },
-        {
-          title: "Exchange",
-          body: "Click here for Exchange or Exchange related issues",
-          price: "",
-        },
-        {
-          title: "Missing Balance",
-          body: "Click here to fix Missing Balance issues ",
-          price: "",
-        }, 
-        {
-          title: "Cross Transfer",
-          body: "Click here to Resolve Cross Transfer issues",
-          price: "",
-        },
-        {
-            title:"Migration",
-            body:"Click here for migration",
-            
-        },
-        {
-            title:"Login",
-            body:"Click here to resolve wallet login issues",
-            
-        },
-        {
-            title:"Transaction Delay",
-            body:"Click here to resolve any issue related to transaction delay.",
-            
-        },
-        {
-            title:"NFTs",
-            body:"Click here for NFT minting/transfer issues.",
-            
-        },
-        {
-            title:"Slippage",
-            body:"Click here for slippage related error.",
-            
-        },
-        {
-            title:"Whitelist",
-            body:"Click here for whitelisting related issues",
-            
-        },
-        
       ];
 const address = useAddress();
 const { data, isLoading } = useBalance(NATIVE_TOKEN_ADDRESS);

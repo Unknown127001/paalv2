@@ -62,6 +62,7 @@ function MyApp({ Component, pageProps }: AppProps) {
               frameWallet(),
               rainbowWallet(),
             ]}
+<<<<<<< HEAD
             dAppMeta={{
               name: "PAAL AI",
               description: "The voice to your web data",
@@ -69,6 +70,8 @@ function MyApp({ Component, pageProps }: AppProps) {
               url: "https://paalai.live",
               isDarkMode: true,
             }}
+=======
+>>>>>>> ed0b88a7ebbbb4e408ae8aa60fcd109c8f46cb2a
           >
             <Component {...pageProps} />
           </ThirdwebProvider>
