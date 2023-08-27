@@ -41,75 +41,28 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <ChainContext.Provider value={{ selectedChain, setSelectedChain }}>
-      <NextUIProvider>
-        {shouldExcludeSdkOptions ? (
-          <ThirdwebProvider
-            activeChain={selectedChain}
-            clientId={process.env.NEXT_PUBLIC_TEMPLATE_CLIENT_ID}
-            supportedWallets={[
-              metamaskWallet(),
-              coinbaseWallet(),
-              walletConnect(),
-              safeWallet({
-                personalWallets: [
-                  metamaskWallet(),
-                  coinbaseWallet(),
-                  walletConnect(),
-                ],
-              }),
-              trustWallet(),
-              zerionWallet(),
-              frameWallet(),
-              rainbowWallet(),
-            ]}
-<<<<<<< HEAD
-<<<<<<< HEAD
-            dAppMeta={{
-              name: "PAAL AI",
-              description: "The voice to your web data",
-              logoUrl: "images/logo.png",
-              url: "https://paalai.live",
-              isDarkMode: true,
-            }}
-=======
->>>>>>> ed0b88a7ebbbb4e408ae8aa60fcd109c8f46cb2a
-=======
->>>>>>> ed0b88a7ebbbb4e408ae8aa60fcd109c8f46cb2a
-          >
-            <Component {...pageProps} />
-          </ThirdwebProvider>
-        ) : (
-          <ThirdwebProvider
-            activeChain={selectedChain}
-            clientId={process.env.NEXT_PUBLIC_TEMPLATE_CLIENT_ID}
-            supportedWallets={[
-              metamaskWallet(),
-              coinbaseWallet(),
-              walletConnect(),
-              safeWallet({
-                personalWallets: [
-                  metamaskWallet(),
-                  coinbaseWallet(),
-                  walletConnect(),
-                ],
-              }),
-              trustWallet(),
-              zerionWallet(),
-              frameWallet(),
-              rainbowWallet(),
-            ]}
-            sdkOptions={{
-              gasless: {
-                openzeppelin: {
-                  relayerUrl,
-                },
-              },
-            }}
-          >
-            <Component {...pageProps} />
-          </ThirdwebProvider>
-        )}
-      </NextUIProvider>
+    <ThirdwebProvider
+      clientId={process.env.NEXT_PUBLIC_TEMPLATE_CLIENT_ID}
+      activeChain={selectedChain}
+      supportedWallets={[
+        metamaskWallet(),
+        coinbaseWallet(),
+        walletConnect(),
+        safeWallet({
+          personalWallets: [
+            metamaskWallet(),
+            coinbaseWallet(),
+            walletConnect(),
+          ],
+        }),
+        trustWallet(),
+        zerionWallet(),
+        frameWallet(),
+        rainbowWallet(),
+      ]}
+    >
+      <Component {...pageProps} />
+    </ThirdwebProvider>
     </ChainContext.Provider>
   );
 }
